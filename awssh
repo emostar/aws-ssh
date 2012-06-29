@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+import logging
+from optparse import OptionParser
+import sys
+
+from login import Client
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.CRITICAL)
+
+    parser = OptionParser()
+    parser.add_option('-t', '--tag', action='append', dest='tags')
+    parser.add_option('-r', '--region', dest='region')
+    (options, args) = parser.parse_args()
+
+    client = Client(region=options.region)
+
+    if options.tags is None:
+        if len(args) == 0:
+            print "No instances specified"
+            sys.exit(1)
+        instance_id = args[0]
+        client.login(instance_id=instance_id)
+    else:
+        if len(args) > 1:
+            print "Only one command can be specified"
+            sys.exit(1)
+
+        if len(args) == 0:
+            client.login(tags=options.tags)
+        else:
+            client.run_command(args[0], tags=options.tags)
