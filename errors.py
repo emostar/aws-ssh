@@ -1,0 +1,2 @@
+class UnknownAWSInstance(Exception):
+    pass
